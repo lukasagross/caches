@@ -19,7 +19,11 @@ def safe_eval(expr):
     :param expr: String representation of arithmetic using only +, -, *
     :return: Integer result of the operations
     """
-    return _eval(ast.parse(expr, mode='eval').body)
+    try:
+        return _eval(ast.parse(expr, mode='eval').body)
+
+    except Exception as exc:
+        raise TypeError(f"{expr} failed in safe_eval") from exc
 
 
 def _eval(ast_node):

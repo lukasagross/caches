@@ -1,5 +1,6 @@
 import pytest
 
+from caches import cache
 from caches import program
 from caches.safe_eval import safe_eval
 
@@ -42,3 +43,58 @@ def test_get_address():
     expression = program.Expression(definition, indices)
     assert expression.get_address({"i": 1}) == 6408
     assert expression.get_address({"i": 5}) == 6952
+
+
+def test_simple_program():
+    double_def = program.Definition(8, [32, 32], 0)
+
+    expressions = [
+        program.Expression(double_def, ["{i}", "{j}"]),
+        program.Expression(double_def, ["{i}", "{j}+1"]),
+        program.Expression(double_def, ["{i}", "{j}+2"]),
+        program.Expression(double_def, ["{i}", "{j}+3"])
+    ]
+
+    statements = [program.Statement(expression) for expression in expressions]
+
+    body = program.Body(statements)
+    inner_loop = program.Loop("j", 0, "{j}<29", "{j}+4", body)
+    outer_loop = program.Loop("i", 0, "{i}<32", "{i}+1", inner_loop)
+    prog = program.Body()
+    prog.add_statement(outer_loop)
+    c = cache.Cache(32, 1, 64)
+
+    prog.run(c)
+
+    assert c.accesses == 1024
+    assert c.misses == 128
+    assert c.write_misses == 128
+
+
+def test_simple_program2():
+    double_def = program.Definition(8, [32, 32], 0)
+    short_def = program.Definition(2, [32, 128], double_def.end_address)
+
+    expressions = [
+        program.Expression(double_def, ["{i}", "{j}"]),
+        program.Expression(double_def, ["{i}", "{j}+1"]),
+        program.Expression(double_def, ["{i}", "{j}+2"]),
+        program.Expression(double_def, ["{i}", "{j}+3"]),
+        program.Expression(short_def, ["{i}", "{j}"]),
+        program.Expression(short_def, ["{i}", "{j}+3"])
+    ]
+
+    statements = [program.Statement(expression) for expression in expressions]
+
+    body = program.Body(statements)
+    inner_loop = program.Loop("j", 0, "{j}<29", "{j}+4", body)
+    outer_loop = program.Loop("i", 0, "{i}<32", "{i}+1", inner_loop)
+    prog = program.Body()
+    prog.add_statement(outer_loop)
+    c = cache.Cache(32, 1, 64)
+
+    prog.run(c)
+
+    assert c.accesses == 1536
+    assert c.misses == 224
+    assert c.write_misses == 224
