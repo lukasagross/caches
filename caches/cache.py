@@ -50,7 +50,7 @@ class Cache:
         set_index = (address & self.set_mask) >> self.offset_bits
         set_index %= self.num_sets
         offset = address & self.offset_mask
-        if offset + size >= self.block_size:
+        if offset + size > self.block_size:
             # Don't want to deal with accesses that need to span multiple blocks
             raise ValueError(f"Access of {size} bytes at address {address} requires >1 block")
         base_address = address - offset

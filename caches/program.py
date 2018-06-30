@@ -18,6 +18,13 @@ class Definition:
                 f"dimensions {self.dimensions}, "
                 f"start address {self.address}")
 
+    @property
+    def end_address(self):
+        address = self.type_size
+        for dim in self.dimensions:
+            address *= dim
+        return address
+
 
 class Expression:
     def __init__(self, definition, indices, offset=0):
@@ -44,13 +51,15 @@ class Expression:
 
 
 class Statement:
-    def __init__(self, left, right):
+    def __init__(self, left, right=None):
         """
         An assignment statement
         :param left: Expression on the left hand side of this assignment Statement
         :param right: List of Expressions on the right hand side of this assignment Statement
         """
         self.left = left
+        if right is None:
+            right = list()
         self.right = right
 
     def run(self, cache, bindings):
