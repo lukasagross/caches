@@ -18,17 +18,19 @@ class Definition:
 
 
 class Expression:
-    def __init__(self, definition, indices):
+    def __init__(self, definition, indices, offset=0):
         """
         An expression consisting of a single array access
         :param definition: Definition that this Expression accesses
         :param indices: List of Format Strings that correspond to the indices to use to access the Definition.
                         has the form ["{i} + 1", "{j} * 2"] which means definition[i+1][j*2]
+        :param offset: Integer offset from the address, used in structs
         """
         self.indices = indices
         self.type_size = definition.type_size
         self.dimensions = definition.dimensions
         self.base_address = definition.address
+        self.offset = offset
 
     def get_address(self, bindings):
         address = self.base_address
@@ -36,7 +38,7 @@ class Expression:
         for i in range(len(self.indices) - 1, -1, -1):
             address += scale * safe_eval(self.indices[i].format(**bindings))
             scale *= self.dimensions[i]
-        return address
+        return address + self.offset
 
 
 class Statement:
@@ -50,7 +52,7 @@ class Statement:
         self.right = right
 
     def run(self, cache, bindings):
-        # Making the assumption that subexpressions are evaluated left to right
+        # Making the assumption that subexpressions on the right are evaluated left to right
         for subexpression in self.right:
             cache.access(subexpression.get_address(bindings), subexpression.type_size, "r")
         cache.access(self.left.get_address(bindings), self.left.type_size, "w")
@@ -83,6 +85,10 @@ class Loop:
 
 class Body:
     def __init__(self, statements=None):
+        """
+        The body of a program or for loop
+        :param statements: List of Loops and Statements
+        """
         if statements is None:
             statements = list()
         self.statements = statements
