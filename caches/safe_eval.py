@@ -15,8 +15,8 @@ OPERATORS = {
 
 def safe_eval(expr):
     """
-    Eval is evil. Use safe_eval to evaluate arithmetic safely.
-    :param expr: String representation of arithmetic using only +, -, *
+    Eval is evil. Use safe_eval to evaluate arithmetic/logic safely.
+    :param expr: String representation of arithmetic/logic using only +, -, *, >, >=, <, <=
     :return: Integer result of the operations
     """
     try:
