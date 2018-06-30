@@ -4,14 +4,14 @@ import program
 from safe_eval import safe_eval
 
 
-def test_safe_eval_allowed_arithmetic():
+def test_allowed_arithmetic():
     assert safe_eval("1+1") == 2
     assert safe_eval("9 * 10") == 90
     assert safe_eval("2 + (-5)") == -3
     assert safe_eval("3-2") == 1
 
 
-def test_safe_eval_allowed_logic():
+def test_allowed_logic():
     assert safe_eval("1>0")
     assert safe_eval("0<1")
     assert safe_eval("-1<0")
