@@ -62,13 +62,13 @@ def test_simple_program():
     outer_loop = program.Loop("i", 0, "{i}<32", "{i}+1", inner_loop)
     prog = program.Body()
     prog.add_statement(outer_loop)
-    c = cache.Cache(32, 1, 64)
+    prog_cache = cache.Cache(32, 1, 64)
 
-    prog.run(c)
+    prog.run(prog_cache)
 
-    assert c.accesses == 1024
-    assert c.misses == 128
-    assert c.write_misses == 128
+    assert prog_cache.accesses == 1024
+    assert prog_cache.misses == 128
+    assert prog_cache.write_misses == 128
 
 
 def test_simple_program2():
@@ -91,10 +91,10 @@ def test_simple_program2():
     outer_loop = program.Loop("i", 0, "{i}<32", "{i}+1", inner_loop)
     prog = program.Body()
     prog.add_statement(outer_loop)
-    c = cache.Cache(32, 1, 64)
+    prog_cashe = cache.Cache(32, 1, 64)
 
-    prog.run(c)
+    prog.run(prog_cashe)
 
-    assert c.accesses == 1536
-    assert c.misses == 224
-    assert c.write_misses == 224
+    assert prog_cashe.accesses == 1536
+    assert prog_cashe.misses == 224
+    assert prog_cashe.write_misses == 224

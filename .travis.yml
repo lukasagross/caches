@@ -5,6 +5,6 @@ cache: pip
 install:
   - pip install -r requirements.txt
 script:
-  - pylint caches/*.py
-  - pycodestyle --max-line-length=100 caches/*.py
+  - pylint caches
+  - pycodestyle --max-line-length=100 caches
   - py.test caches/test/*
