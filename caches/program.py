@@ -1,4 +1,4 @@
-from safe_eval import safe_eval
+from caches.safe_eval import safe_eval
 
 
 class Definition:

@@ -1,7 +1,7 @@
 import pytest
 
-import program
-from safe_eval import safe_eval
+from caches import program
+from caches.safe_eval import safe_eval
 
 
 def test_allowed_arithmetic():
