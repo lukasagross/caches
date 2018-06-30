@@ -1,7 +1,8 @@
 import ast
 import operator as op
 
-operators = {
+
+OPERATORS = {
     ast.Add: op.add,
     ast.Sub: op.sub,
     ast.Mult: op.mul,
@@ -26,8 +27,8 @@ def _eval(ast_node):
         return ast_node.n
     elif isinstance(ast_node, ast.Compare):
         return _eval_compare(ast_node)
-    elif isinstance(ast_node, ast.BinOp) and type(ast_node.op) in operators:
-        return operators[type(ast_node.op)](_eval(ast_node.left), _eval(ast_node.right))
+    elif isinstance(ast_node, ast.BinOp) and type(ast_node.op) in OPERATORS:
+        return OPERATORS[type(ast_node.op)](_eval(ast_node.left), _eval(ast_node.right))
     elif isinstance(ast_node.op, ast.USub):
         return op.neg(_eval(ast_node.operand))
     else:
@@ -38,9 +39,9 @@ def _eval_compare(ast_node):
     left = _eval(ast_node.left)
     for operation, comp in zip(ast_node.ops, ast_node.comparators):
         right = _eval(comp)
-        if type(operation) not in operators:
+        if type(operation) not in OPERATORS:
             raise TypeError(f"Disallowed operator in {ast_node}")
-        if operators[type(operation)](left, right):
+        if OPERATORS[type(operation)](left, right):
             left = right
         else:
             return False

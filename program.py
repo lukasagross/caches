@@ -14,7 +14,9 @@ class Definition:
         self.address = address
 
     def __str__(self):
-        return f"Definition: size {self.type_size}, dimensions {self.dimensions}, start address {self.address}"
+        return (f"Definition: size {self.type_size}, "
+                f"dimensions {self.dimensions}, "
+                f"start address {self.address}")
 
 
 class Expression:
@@ -22,7 +24,7 @@ class Expression:
         """
         An expression consisting of a single array access
         :param definition: Definition that this Expression accesses
-        :param indices: List of Format Strings that correspond to the indices to use to access the Definition.
+        :param indices: List of Format Strings representing how to access the Definition.
                         has the form ["{i} + 1", "{j} * 2"] which means definition[i+1][j*2]
         :param offset: Integer offset from the address, used in structs
         """
