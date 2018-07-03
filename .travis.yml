@@ -6,5 +6,5 @@ cache: pip
 install:
   - pip install -r requirements.txt
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pylint caches; pycodestyle --max-line-length=100 caches; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then pylint caches; pycodestyle --max-line-length=100 caches; fi
   - py.test caches/test/*
