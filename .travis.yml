@@ -1,10 +1,10 @@
 language: python
 python:
+  - "2.7"
   - "3.6"
 cache: pip
 install:
   - pip install -r requirements.txt
 script:
-  - pylint caches
-  - pycodestyle --max-line-length=100 caches
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then pylint caches; pycodestyle --max-line-length=100 caches; fi
   - py.test caches/test/*

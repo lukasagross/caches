@@ -22,9 +22,9 @@ class Cache:
         self.accesses = self.misses = self.read_misses = self.write_misses = 0
 
     def __str__(self):
-        return (f"Cache: {self.num_sets} sets of {self.blocks_per_set} "
-                f"blocks of size {self.block_size} "
-                f"and miss rate {self.misses}/{self.accesses}")
+        return ("Cache: {} sets of {} ".format(self.num_sets, self.blocks_per_set)
+                + "blocks of size {} ".format(self.block_size)
+                + "and miss rate {}/{}".format(self.misses, self.accesses))
 
     def _choose_victim(self, set_index):
         for block in range(self.blocks_per_set):
@@ -52,7 +52,7 @@ class Cache:
         offset = address & self.offset_mask
         if offset + size > self.block_size:
             # Don't want to deal with accesses that need to span multiple blocks
-            raise ValueError(f"Access of {size} bytes at address {address} requires >1 block")
+            raise ValueError("Access of {} bytes at {} requires >1 block".format(size, address))
         base_address = address - offset
         if not self._address_in_set(set_index, base_address):
             self._update(set_index, base_address)
@@ -62,4 +62,4 @@ class Cache:
             elif access_type == "w":
                 self.write_misses += 1
             else:
-                raise ValueError(f"Unknown access type {access_type}")
+                raise ValueError("Unknown access type {}".format(access_type))

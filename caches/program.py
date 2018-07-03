@@ -14,9 +14,9 @@ class Definition:
         self.address = address
 
     def __str__(self):
-        return (f"Definition: size {self.type_size}, "
-                f"dimensions {self.dimensions}, "
-                f"start address {self.address}")
+        return ("Definition: size {}, ".format(self.type_size)
+                + "dimensions {}, ".format(self.dimensions)
+                + "start address {}".format(self.address))
 
     @property
     def end_address(self):

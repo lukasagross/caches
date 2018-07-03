@@ -22,8 +22,8 @@ def safe_eval(expr):
     try:
         return _eval(ast.parse(expr, mode='eval').body)
 
-    except Exception as exc:
-        raise TypeError(f"{expr} failed in safe_eval") from exc
+    except Exception:
+        raise TypeError("{} failed in safe_eval".format(expr))
 
 
 def _eval(ast_node):
@@ -36,7 +36,7 @@ def _eval(ast_node):
     elif isinstance(ast_node.op, ast.USub):
         return op.neg(_eval(ast_node.operand))
     else:
-        raise TypeError(f"Disallowed operator in {ast_node}")
+        raise TypeError("Disallowed operator in {}".format(ast_node))
 
 
 def _eval_compare(ast_node):
@@ -44,7 +44,7 @@ def _eval_compare(ast_node):
     for operation, comp in zip(ast_node.ops, ast_node.comparators):
         right = _eval(comp)
         if type(operation) not in OPERATORS:
-            raise TypeError(f"Disallowed operator in {ast_node}")
+            raise TypeError("Disallowed operator in {}".format(ast_node))
         if OPERATORS[type(operation)](left, right):
             left = right
         else:
