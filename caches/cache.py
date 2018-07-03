@@ -52,7 +52,7 @@ class Cache:
         offset = address & self.offset_mask
         if offset + size > self.block_size:
             # Don't want to deal with accesses that need to span multiple blocks
-            raise ValueError("Access of {} bytes at address {} requires >1 block".format(size, address))
+            raise ValueError("Access of {} bytes at {} requires >1 block".format(size, address))
         base_address = address - offset
         if not self._address_in_set(set_index, base_address):
             self._update(set_index, base_address)
